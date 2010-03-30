@@ -23,6 +23,7 @@
 from phpbb.auth.sql import get_user_row
 from phpbb.utf.utf_tools import utf8_clean_string
 from phpbb.functions import phpbb_check_hash
+from phpbb.constants import USER_INACTIVE, USER_IGNORE
 
 def login_db(username=None, password=None):
     if not username:
