@@ -1,0 +1,8 @@
+{% extends "base.html" %}
+{% block content %}
+<ul>
+<li><a href="{% url login_page %}">Log in</a></li>
+<li><a href="{% url protected_page %}">Access protected resource</a></li>
+<li><a href="{% url logout_page %}">Log out</a></li>
+</ul>
+{% endblock content %}
