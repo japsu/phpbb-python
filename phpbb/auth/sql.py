@@ -38,12 +38,18 @@ GET_USER_ROW_SQL = 'SELECT {0} FROM {1} WHERE username_clean = {2}'
 
 class GetUserRow(object):
     def __init__(self, *args, **kwargs):
+        self.conn = None
+        self.sql = None
+
         if args or kwargs:
             self.setup(*args, **kwargs)
 
     def setup(self, conn, param_style=DEFAULT_PARAM_STYLE, users_table=DEFAULT_USERS_TABLE):
         self.conn = conn
         self.sql = GET_USER_ROW_SQL.format(", ".join(USER_ROW_FIELDS), users_table, param_style)
+
+    def is_setup(self):
+        return self.conn is not None
 
     def __call__(self, username_clean):
         c = self.conn.cursor()
@@ -53,3 +59,4 @@ class GetUserRow(object):
 
 get_user_row = GetUserRow()
 setup = get_user_row.setup
+is_setup = get_user_row.is_setup

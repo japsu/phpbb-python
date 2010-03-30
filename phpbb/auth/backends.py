@@ -18,10 +18,23 @@
 #
 
 from django.contrib.auth.models import User
+from django.conf import settings
 
 from phpbb.auth.auth_db import login_db
+from phpbb.auth.sql import setup, is_setup
 
-class PhpbbBackend:
+def connect_to_database():
+    if is_setup():
+        return
+
+    db_module = __import__(settings.PHPBB_AUTH_DB_MODULE, globals(), locals(), [], -1)
+    conn = db_module.connect(**settings.PHPBB_AUTH_DB_PARAMS)
+    setup(conn)
+
+class PhpbbBackend(object):
+    def __init__(self):
+        connect_to_database()
+
     def authenticate(self, username=None, password=None):
         if username is None or password is None:
             return None
@@ -31,9 +44,14 @@ class PhpbbBackend:
             return None
 
         user, created = User.objects.get_or_create(
-            username=user_row["username_clean"],
+            username=user_row["username"],
             email=user_row.get("user_email", None)
         )
 
         return user
 
+    def get_user(self, user_id):
+        try:
+            return User.objects.get(pk=user_id)
+        except User.DoesDotExist:
+            return None
