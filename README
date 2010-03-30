@@ -1,0 +1,87 @@
+PHPBB AUTHENTICATION IMPLEMENTED IN PYTHON
+==========================================
+
+Author: 	Santtu Pajukanta <santtu@pajukanta.fi>
+Updated:	2010-03-31
+
+Introduction
+============
+
+phpbb-python implements the authentication part of phpBB3 in Python. This
+enables Python-based web applications to authenticate against the user
+account database of an existing phpBB3 discussion board.
+
+A Django authentication backend is also provided. Tested with phpBB 3.0.7,
+Django 1.0 and PostgreSQL 8.4. Other configurations may or may not work.
+
+This documentation assumes extensive knowledge of the internals of both
+Django and phpBB3. Not for the faint of heart. Use the Source, Luke.
+
+
+Copyright and licensing
+=======================
+
+This is a very direct port of the login code in phpBB3 itself. Thus this
+package can be considered a derivative work of phpBB3 and the license of
+phpBB3 (GPLv2, sadly not "or later") applies.
+
+However, should the phpBB3 software some day be relicensed to GPLv2 or
+later, I won't stop you from using this package with the "later" licenses.
+Therefore, files that I don't consider derivative of phpBB3 carry only my
+copyright notice and the "GPLv2 or later" license boilerplate.
+
+For legal stuff, see the files COPYING and LICENSE.
+
+
+Basic usage (without Django)
+============================
+
+from phpbb.auth.sql import setup
+from phpbb.auth.auth_db import login_db
+
+import psycopg2
+
+conn = psycopg2.connect(
+    database="phpbb3",
+    user="phpbb3",
+    password="phpbb3"
+)
+setup(conn)
+
+result, user_row = login_db("username", "password")
+if result == "LOGIN_SUCCESS":
+    print "Multipass!"
+else:
+    print "You shall not pass!"
+
+
+Usage with Django
+=================
+
+Make sure the "phpbb" module is somewhere in your PythonPath. Add this
+to your settings.py:
+
+AUTHENTICATION_BACKENDS = (
+    ('django.contrib.auth.backends.ModelBackend'),
+    ('phpbb.auth.backends.PhpbbBackend'),
+)
+
+PHPBB_AUTH_DB_MODULE = "psycopg2"
+PHPBB_AUTH_DB_PARAMS = {
+    "user": "",
+    "password": "",
+    "database": "",
+}
+
+Obviously, there's some filling in to do. Notice how we left ModelBackend in,
+too. This way we can define superusers etc. in Django and just the peons in
+phpBB3.
+
+There's a working (WORKSFORME) example in examples/hammertime. Have fun.
+
+
+FAQ
+===
+
+Q: Can I have a pony?
+A: No, you can't have a pony.
