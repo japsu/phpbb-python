@@ -29,7 +29,7 @@ def connect_to_database():
 
     db_module = __import__(settings.PHPBB_AUTH_DB_MODULE, globals(), locals(), [], -1)
     conn = db_module.connect(**settings.PHPBB_AUTH_DB_PARAMS)
-    setup(conn)
+    setup(conn, param_style=settings.PHPBB_AUTH_DB_PARAM_STYLE, users_table=settings.PHPBB_AUTH_DB_USERS_TABLE)
 
 class PhpbbBackend(object):
     def __init__(self):

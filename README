@@ -4,6 +4,7 @@ PHPBB AUTHENTICATION IMPLEMENTED IN PYTHON
 Author: 	Santtu Pajukanta <santtu@pajukanta.fi>
 Updated:	2010-03-31
 
+
 Introduction
 ============
 
@@ -72,6 +73,8 @@ PHPBB_AUTH_DB_PARAMS = {
     "password": "",
     "database": "",
 }
+PHPBB_AUTH_DB_PARAM_STYLE = "%s"
+PHPBB_AUTH_DB_USERS_TABLE = "phpbb_users"
 
 Obviously, there's some filling in to do. Notice how we left ModelBackend in,
 too. This way we can define superusers etc. in Django and just the peons in
