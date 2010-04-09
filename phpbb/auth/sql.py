@@ -34,7 +34,7 @@ USER_ROW_FIELDS = [
     'user_login_attempts'
 ]
 
-GET_USER_ROW_SQL = 'SELECT {0} FROM {1} WHERE username_clean = {2}'
+GET_USER_ROW_SQL = 'SELECT %s FROM %s WHERE username_clean = %s'
 
 class GetUserRow(object):
     def __init__(self, *args, **kwargs):
@@ -46,7 +46,7 @@ class GetUserRow(object):
 
     def setup(self, conn, param_style=DEFAULT_PARAM_STYLE, users_table=DEFAULT_USERS_TABLE):
         self.conn = conn
-        self.sql = GET_USER_ROW_SQL.format(", ".join(USER_ROW_FIELDS), users_table, param_style)
+        self.sql = GET_USER_ROW_SQL % (", ".join(USER_ROW_FIELDS), users_table, param_style)
 
     def is_setup(self):
         return self.conn is not None
