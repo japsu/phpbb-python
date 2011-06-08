@@ -45,7 +45,7 @@ class PhpbbBackend(object):
 
         user, created = User.objects.get_or_create(
             username=user_row["username"],
-            email=user_row.get("user_email", None)
+            defaults={'email':user_row.get("user_email", None)}
         )
 
         return user
