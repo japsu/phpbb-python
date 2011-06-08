@@ -35,6 +35,9 @@ def login_db(username=None, password=None):
     if type(username) is unicode:
         username = username.encode("UTF-8")
 
+    if type(password) is unicode:
+        password = password.encode("UTF-8")
+
     user_row = get_user_row(utf8_clean_string(username))
     if not user_row:
         return "LOGIN_ERROR_USERNAME", None
