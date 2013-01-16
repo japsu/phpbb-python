@@ -55,7 +55,12 @@ class GetUserRow(object):
         c = self.conn.cursor()
         c.execute(self.sql, [username_clean,])
 
-        return dict(zip(USER_ROW_FIELDS, c.fetchone()))
+        user_row = c.fetchone()
+
+        if user_row:
+            return dict(zip(USER_ROW_FIELDS, user_row))
+        else:
+            return None
 
 get_user_row = GetUserRow()
 setup = get_user_row.setup
