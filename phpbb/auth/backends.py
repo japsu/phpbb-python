@@ -22,13 +22,22 @@ from django.conf import settings
 
 from phpbb.auth.auth_db import login_db
 from phpbb.auth.sql import setup, is_setup
+from django.views.decorators.debug import sensitive_variables
 
+@sensitive_variables("db_settings")
 def connect_to_database():
     if is_setup():
         return
 
     db_module = __import__(settings.PHPBB_AUTH_DB_MODULE, globals(), locals(), [], -1)
-    conn = db_module.connect(**settings.PHPBB_AUTH_DB_PARAMS)
+
+    db_settings = getattr(settings, "PHPBB_AUTH_DB_KEYS", None)
+    if db_settings is None:
+        import warnings
+        warnings.warn("PHPBB_AUTH_DB_PARAMS should be renamed to PHPBB_AUTH_DB_KEYS for better security!")
+        db_settings = settings.PHPBB_AUTH_DB_PARAMS
+
+    conn = db_module.connect(**db_settings)
     setup(conn, param_style=settings.PHPBB_AUTH_DB_PARAM_STYLE, users_table=settings.PHPBB_AUTH_DB_USERS_TABLE)
 
 class PhpbbBackend(object):

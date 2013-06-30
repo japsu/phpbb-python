@@ -88,7 +88,7 @@ AUTHENTICATION_BACKENDS = (
 )
 
 PHPBB_AUTH_DB_MODULE = "psycopg2"
-PHPBB_AUTH_DB_PARAMS = {
+PHPBB_AUTH_DB_KEYS = {
     "user": "",
     "password": "",
     "database": "",
